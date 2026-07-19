@@ -21,7 +21,8 @@ experience:
 educationTitle: 學歷
 education:
   - period: "2023 - 現在"
-    degree: "電機系"
+    dept: "電機系"
+    degree: "學士"
     school: "銘傳大學"
   - period: "2020 - 2023"
     school: "國立新竹高中"

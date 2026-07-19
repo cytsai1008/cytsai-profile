@@ -38,6 +38,7 @@ const about = defineCollection({
     education: z.array(
       z.object({
         period: z.string(),
+        dept: z.string().optional(),
         degree: z.string().optional(),
         school: z.string(),
       })

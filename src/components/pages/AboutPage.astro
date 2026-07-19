@@ -106,9 +106,10 @@ const nameHtml = about.name.replace(/[()]/g, (m) => `<span class="paren-nudge">$
               <li class="m-0 grid items-baseline gap-x-6 gap-y-2 py-6 first:pt-0 last:pb-0 sm:grid-cols-[8rem_1fr] sm:gap-y-1">
                 <p class="m-0 font-mono-maple text-sm text-fg-muted tabular-nums">{edu.period}</p>
                 <h3 class="title-flush m-0 flex flex-wrap gap-x-4 gap-y-1 leading-snug font-bold text-fg">
-                  {edu.degree && <span class="text-xl">{edu.degree}</span>}
-                  <span class={edu.degree ? "text-base font-normal text-fg-muted" : "text-xl"}>
+                  {edu.dept && <span class="text-xl">{edu.dept}</span>}
+                  <span class={edu.dept ? "text-base font-normal text-fg-muted" : "text-xl"}>
                     {edu.school}
+                    {edu.degree && ` ${edu.degree}`}
                   </span>
                 </h3>
               </li>

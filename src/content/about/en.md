@@ -21,7 +21,8 @@ experience:
 educationTitle: Education
 education:
   - period: "2023 - now"
-    degree: "Dept. of Electrical Engineering"
+    dept: "Dept. of Electrical Engineering"
+    degree: "Bachelor's degree"
     school: "Ming Chuan University"
   - period: "2020 - 2023"
     school: "National Hsinchu Senior High School"
