@@ -1,6 +1,6 @@
 ---
 title: "網站上線了"
-description: "上線這個個人網站的一些筆記，Astro、三種語言，還有 Cloudflare。"
+description: "上線這個個人網站的一些筆記"
 pubDate: 2026-07-19
 tags:
   - astro
