@@ -1,0 +1,64 @@
+{
+  "name": "cytsai-profile",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint src ./*.mjs --fix",
+    "format": "prettier --write src ./*.mjs ./*.md",
+    "lf": "npm run lint && npm run format"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.0.0",
+    "@astrojs/mdx": "^7.0.0",
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/vue": "^7.0.0",
+    "@chinese-fonts/maple-mono-cn": "^2.0.0",
+    "@fontsource/noto-sans": "^5.2.10",
+    "@fontsource/noto-sans-sc": "^5.2.9",
+    "@fontsource/noto-sans-tc": "^5.2.9",
+    "@iconify/vue": "^5.0.0",
+    "@lucide/astro": "^1.7.0",
+    "@lucide/vue": "^1.7.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@tailwindcss/vite": "^4.2.2",
+    "animejs": "^4.3.6",
+    "astro": "^7.0.0",
+    "astro-seo-meta": "^7.0.0",
+    "astro-seo-schema": "^7.0.0",
+    "exifreader": "^4.39.0",
+    "gray-matter": "^4.0.3",
+    "photoswipe": "^5.4.4",
+    "satori": "^0.26.0",
+    "schema-dts": "^1.1.5",
+    "sharp": "^0.34.3",
+    "tailwindcss": "^4.2.2",
+    "vanilla-cookieconsent": "^3.1.0",
+    "vue": "^3.5.31"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^8.57.2",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^1.6.0",
+    "eslint-plugin-vue": "^10.8.0",
+    "opencc": "^1.2.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "typescript": "^5.9.3",
+    "vue-eslint-parser": "^10.4.1"
+  },
+  "overrides": {
+    "@mapbox/node-pre-gyp": {
+      "tar": "7.5.13"
+    }
+  }
+}

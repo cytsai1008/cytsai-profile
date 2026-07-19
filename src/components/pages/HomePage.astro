@@ -1,0 +1,114 @@
+---
+import { getCollection } from "astro:content";
+import { ArrowUpRight } from "@lucide/astro";
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../FormattedDate.astro";
+import { t, localePath, type Locale } from "../../i18n/utils";
+import { compareBlogPostsByDate, getBlogPostsForLocale, getBlogSlug } from "../../lib/blog";
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const tr = t(locale);
+
+const recentPosts = getBlogPostsForLocale(await getCollection("blog"), locale)
+  .sort(compareBlogPostsByDate)
+  .slice(0, 5);
+---
+
+<Layout title={tr.nav.home} description={tr.home.tagline} locale={locale}>
+  <!-- Hero -->
+  <section class="px-4 pt-16 pb-10 sm:pt-24 sm:pb-20">
+    <div data-animate class="mx-auto max-w-5xl p-7 sm:p-10">
+      <!--
+      <p class="m-0 text-sm tracking-[0.08em] text-accent-text">
+        {tr.home.greeting}
+      </p>
+      -->
+      <h1
+        class="mt-3 mb-0 -ml-1 text-[clamp(3rem,8vw,4.75rem)] leading-[1.02] font-bold tracking-[-0.025em] text-fg"
+      >
+        CYTsai
+      </h1>
+      <p class="mt-5 mb-0 max-w-2xl text-lg leading-8 text-fg-muted sm:text-xl">
+        {tr.home.tagline}
+      </p>
+
+      <ul class="mt-10 flex list-none flex-wrap items-center gap-3 p-0">
+        <li>
+          <a
+            href={localePath("/blog", locale)}
+            class="block rounded-lg bg-accent-bg px-6 py-3 text-sm font-semibold no-underline transition-colors hover:bg-accent-dim"
+          >
+            {tr.nav.blog}
+          </a>
+        </li>
+        <li>
+          <a
+            href={localePath("/about", locale)}
+            class="block rounded-lg border border-border bg-surface-alt/55 px-6 py-3 text-sm font-semibold text-fg no-underline transition-colors hover:border-accent hover:bg-surface-alt"
+          >
+            {tr.nav.about}
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/cytsai1008"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-1.5 rounded-lg border border-border bg-surface-alt/55 px-6 py-3 text-sm font-semibold text-fg no-underline transition-colors hover:border-accent hover:bg-surface-alt"
+          >
+            GitHub
+            <ArrowUpRight size={14} aria-hidden="true" class="text-fg-muted" />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Recent Blog Posts -->
+  {
+    recentPosts.length > 0 && (
+      <section class="px-4 py-12">
+        <div class="mx-auto max-w-5xl px-7 sm:px-10">
+          <div data-animate class="mb-8 flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-fg">{tr.home.recentPosts}</h2>
+            <a href={localePath("/blog", locale)} class="text-sm font-medium">
+              {tr.home.viewAll} →
+            </a>
+          </div>
+          <ol data-animate-stagger class="m-0 list-none p-0">
+            {recentPosts.map((post) => (
+              <li
+                data-animate
+                class="m-0 border-t border-border p-0 last:border-b even:bg-surface-alt/40"
+              >
+                <a
+                  href={localePath(`/blog/${getBlogSlug(post.id)}/`, locale)}
+                  class="group grid gap-x-6 gap-y-1 px-3 py-5 no-underline sm:grid-cols-[8rem_1fr]"
+                >
+                  <FormattedDate
+                    date={post.data.pubDate}
+                    locale={locale}
+                    class="text-sm text-fg-muted tabular-nums"
+                  />
+                  <span class="block">
+                    <span class="block text-lg leading-snug font-bold text-fg transition-colors group-hover:text-accent">
+                      {post.data.title}
+                    </span>
+                    {post.data.description && (
+                      <span class="mt-1 line-clamp-2 block text-sm text-fg-muted">
+                        {post.data.description}
+                      </span>
+                    )}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+</Layout>

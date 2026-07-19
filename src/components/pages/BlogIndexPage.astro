@@ -1,0 +1,160 @@
+---
+import { getCollection } from "astro:content";
+import { Pin } from "@lucide/astro";
+import Layout from "../../layouts/Layout.astro";
+import BlogTimeline from "../BlogTimeline.vue";
+import FormattedDate from "../FormattedDate.astro";
+import { t, localePath, localeLang, type Locale } from "../../i18n/utils";
+import {
+  compareBlogPostsByDate,
+  compareFeaturedBlogPosts,
+  getBlogPostsForLocale,
+  getBlogSlug,
+} from "../../lib/blog";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const tr = t(locale);
+
+const allPosts = getBlogPostsForLocale(await getCollection("blog"), locale);
+const pinned = allPosts.filter((p) => p.data.featured).sort(compareFeaturedBlogPosts);
+const posts = allPosts.filter((p) => !p.data.featured).sort(compareBlogPostsByDate);
+
+// Zebra stripes, restarting at each year separator so every group starts unstriped.
+const stripes: boolean[] = [];
+{
+  let count = 0;
+  let prevYear: number | null = null;
+  for (const post of posts) {
+    const year = post.data.pubDate.getFullYear();
+    if (year !== prevYear) {
+      count = 0;
+      prevYear = year;
+    }
+    stripes.push(count % 2 === 1);
+    count++;
+  }
+}
+
+// Right-edge minimap: mirrors the page order — pinned block first, then by year.
+const timelineItems = [...pinned, ...posts].map((post) => ({
+  href: localePath(`/blog/${getBlogSlug(post.id)}/`, locale),
+  title: post.data.title,
+  date: post.data.pubDate.toISOString(),
+  year: post.data.pubDate.getFullYear(),
+  pinned: post.data.featured,
+}));
+---
+
+<Layout title={tr.blog.title} description={tr.blog.description} locale={locale}>
+  {
+    timelineItems.length > 0 && (
+      <BlogTimeline
+        client:load
+        items={timelineItems}
+        lang={localeLang[locale]}
+        pinnedLabel={tr.blog.pinned}
+      />
+    )
+  }
+  <div class="mx-auto max-w-5xl px-4 py-12">
+    <header data-animate class="mb-10">
+      <h1 class="text-4xl font-bold text-fg">{tr.blog.title}</h1>
+      <p class="mt-2 text-lg text-fg-muted">{tr.blog.description}</p>
+    </header>
+
+    {
+      pinned.length > 0 && (
+        <ol data-animate-stagger class="m-0 mb-12 list-none p-0">
+          {pinned.map((post) => (
+            <li
+              data-animate
+              class="m-0 border-t border-border p-0 last:border-b even:bg-surface-alt/40"
+            >
+              <a
+                href={localePath(`/blog/${getBlogSlug(post.id)}/`, locale)}
+                class="group grid gap-x-6 gap-y-1 px-3 py-5 no-underline sm:grid-cols-[8rem_1fr]"
+              >
+                <FormattedDate
+                  date={post.data.pubDate}
+                  locale={locale}
+                  class="text-sm text-fg-muted tabular-nums"
+                />
+                <span class="block">
+                  <span class="flex items-baseline gap-2 text-lg leading-snug font-bold text-fg transition-colors group-hover:text-accent">
+                    <Pin
+                      class="size-4 shrink-0 translate-y-[1.5px] text-highlight-dim"
+                      aria-hidden="true"
+                    />
+                    <span class="sr-only">{tr.blog.pinned}</span>
+                    {post.data.title}
+                  </span>
+                  {post.data.description && (
+                    <span class="mt-1 line-clamp-2 block text-sm text-fg-muted">
+                      {post.data.description}
+                    </span>
+                  )}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )
+    }
+
+    {
+      posts.length === 0 && pinned.length === 0 ? (
+        <p class="text-fg-muted">No posts yet.</p>
+      ) : posts.length > 0 ? (
+        <ol data-animate-stagger class="m-0 list-none p-0">
+          {posts.map((post, i) => (
+            <>
+              {(i === 0 ||
+                post.data.pubDate.getFullYear() !== posts[i - 1].data.pubDate.getFullYear()) && (
+                <li
+                  data-animate
+                  class:list={["m-0 list-none p-0 px-3 pb-3", i > 0 ? "pt-8" : "pt-0"]}
+                >
+                  <span class="text-sm font-bold text-accent-text tabular-nums">
+                    {post.data.pubDate.getFullYear()}
+                  </span>
+                </li>
+              )}
+              <li
+                data-animate
+                class:list={[
+                  "m-0 border-t border-border p-0 last:border-b",
+                  stripes[i] && "bg-surface-alt/40",
+                ]}
+              >
+                <a
+                  href={localePath(`/blog/${getBlogSlug(post.id)}/`, locale)}
+                  class="group grid gap-x-6 gap-y-1 px-3 py-5 no-underline sm:grid-cols-[8rem_1fr]"
+                >
+                  <FormattedDate
+                    date={post.data.pubDate}
+                    locale={locale}
+                    class="text-sm text-fg-muted tabular-nums"
+                  />
+                  <span class="block">
+                    <span class="block text-lg leading-snug font-bold text-fg transition-colors group-hover:text-accent">
+                      {post.data.title}
+                    </span>
+                    {post.data.description && (
+                      <span class="mt-1 line-clamp-2 block text-sm text-fg-muted">
+                        {post.data.description}
+                      </span>
+                    )}
+                  </span>
+                </a>
+              </li>
+            </>
+          ))}
+        </ol>
+      ) : null
+    }
+  </div>
+</Layout>

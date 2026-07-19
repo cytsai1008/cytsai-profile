@@ -1,0 +1,35 @@
+---
+import { localeLang, type Locale } from "../i18n/utils";
+
+interface Props {
+  date: Date;
+  locale?: Locale;
+  class?: string;
+}
+
+const { date, locale = "en", class: className } = Astro.props;
+
+// SSR renders in the page's own locale, so no-JS visitors and headless renderers
+// get a date that matches the language around it. The inline script below then
+// re-formats to the visitor's browser locale, which wins when JS is available.
+const fallback = date.toLocaleDateString(localeLang[locale], {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+---
+
+<time datetime={date.toISOString()} data-date={date.toISOString()} class={className}>
+  {fallback}
+</time>
+
+<script>
+  // Re-format all date elements using the browser's actual locale
+  document.querySelectorAll<HTMLTimeElement>("time[data-date]").forEach((el) => {
+    el.textContent = new Intl.DateTimeFormat(navigator.language, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(new Date(el.dataset.date!));
+  });
+</script>

@@ -1,0 +1,62 @@
+---
+import { type Locale, localePath } from "../i18n/utils";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-12 border-t border-border px-4 py-6 text-center">
+  <div
+    data-animate-stagger
+    data-animate-on-load-only
+    class="mt-3 flex flex-col items-center gap-y-1 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6"
+  >
+    <span data-animate class="text-xs">
+      <a href={localePath("/blog", locale)}>Articles</a>
+      <span class="mx-1.5" style="opacity: 0.4">·</span>
+      <a
+        href="https://creativecommons.org/licenses/by/4.0/"
+        target="_blank"
+        rel="noopener noreferrer">CC BY 4.0</a
+      >
+    </span>
+    <span data-animate data-opacity="0.35" aria-hidden="true" class="hidden text-fg-muted sm:inline"
+      >|</span
+    >
+    <span data-animate class="text-xs">
+      <a
+        href="https://github.com/cytsai1008/cytsai-profile"
+        target="_blank"
+        rel="noopener noreferrer">Source Code</a
+      >
+      <span class="mx-1.5" style="opacity: 0.4">·</span>
+      <a href="https://choosealicense.com/licenses/mit/" target="_blank" rel="noopener noreferrer"
+        >MIT</a
+      >
+    </span>
+    <span data-animate data-opacity="0.35" aria-hidden="true" class="hidden text-fg-muted sm:inline"
+      >|</span
+    >
+    <span data-animate class="text-xs">
+      <button
+        type="button"
+        data-cc="show-preferencesModal"
+        class="cursor-pointer text-inherit hover:underline"
+      >
+        Cookie Preferences
+      </button>
+    </span>
+  </div>
+  <p
+    data-animate
+    data-animate-on-load-only
+    class="m-0 mt-3 text-xs font-medium tracking-widest text-fg-muted"
+  >
+    <span>&copy; {year} </span>
+    <a href="https://link.photocat.blue" target="_blank" rel="noopener noreferrer">CYTsai</a>
+  </p>
+</footer>

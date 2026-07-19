@@ -1,0 +1,168 @@
+---
+import "@chinese-fonts/maple-mono-cn/dist/MapleMono-CN-Regular/result.css";
+import "@chinese-fonts/maple-mono-cn/dist/MapleMono-CN-Bold/result.css";
+import { getEntry, render } from "astro:content";
+import { ArrowUpRight, Mail, MapPin } from "@lucide/astro";
+import Layout from "../../layouts/Layout.astro";
+// import SocialLinks from "../SocialLinks.vue";
+import { t, type Locale } from "../../i18n/utils";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const tr = t(locale);
+const entry = await getEntry("about", locale);
+if (!entry) throw new Error(`Missing about content for locale "${locale}"`);
+const about = entry.data;
+const { Content } = await render(entry);
+const socialLinks = [
+  { label: "GitHub", href: "https://github.com/cytsai1008", icon: "simple-icons:github" },
+  { label: "Email", href: "mailto:cytsai@mail.photocat.blue", icon: "lucide:mail" },
+  { label: "Other Link", href: "https://link.photocat.blue/", icon: "lucide:link" },
+];
+
+const sectionTitle = "mb-5 font-sans text-sm font-bold tracking-[0.18em] text-accent-text";
+
+// Parentheses are drawn tall/centered (they dip below the baseline), which looks
+// off at display size next to the flat-bottomed letters. Lift just the ( ) glyphs.
+const nameHtml = about.name.replace(/[()]/g, (m) => `<span class="paren-nudge">${m}</span>`);
+---
+
+<Layout title={tr.about.title} description={tr.home.tagline} locale={locale}>
+  <div class="mx-auto max-w-5xl px-4 py-12 [word-break:auto-phrase]">
+    <!-- Résumé header -->
+    <header data-animate class="mb-12">
+      <h1 class="mb-1 text-4xl font-bold text-fg" set:html={nameHtml} />
+      <p class="m-0 text-lg text-fg-muted">{about.role}</p>
+      <ul
+        class="mt-4 flex list-none flex-wrap items-center gap-x-5 gap-y-1 p-0 font-mono-maple text-sm text-fg-muted"
+      >
+        <li class="flex items-center gap-1.5">
+          <MapPin size={14} aria-hidden="true" />
+          {about.location}
+        </li>
+        <li class="flex items-center gap-1.5">
+          <Mail size={14} aria-hidden="true" />
+          <a href="mailto:cytsai@mail.photocat.blue" class="text-inherit">
+            cytsai@mail.photocat.blue
+          </a>
+        </li>
+        <li class="flex items-center gap-1.5">
+          <a
+            href="https://github.com/cytsai1008"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-1 text-inherit"
+          >
+            github.com/cytsai1008
+            <ArrowUpRight size={12} aria-hidden="true" />
+          </a>
+        </li>
+      </ul>
+    </header>
+
+    <div class="space-y-12">
+      <!-- Summary -->
+      <section data-animate data-animate-on-load-only>
+        <h2 class={sectionTitle}>{about.summaryTitle}</h2>
+        <div class="prose max-w-[70ch]">
+          <Content />
+        </div>
+      </section>
+
+      <!-- Experience -->
+      <section data-animate data-animate-on-load-only>
+        <h2 class={sectionTitle}>{about.experienceTitle}</h2>
+        <ol class="m-0 list-none divide-y divide-border p-0">
+          {
+            about.experience.map((job) => (
+              <li class="m-0 grid items-baseline gap-x-6 gap-y-2 py-6 first:pt-0 last:pb-0 sm:grid-cols-[8rem_1fr] sm:gap-y-1">
+                <p class="m-0 font-mono-maple text-sm text-fg-muted tabular-nums">{job.period}</p>
+                <div>
+                  <h3 class="title-flush m-0 flex flex-wrap gap-x-4 gap-y-1 leading-snug font-bold text-fg">
+                    <span class="text-xl">{job.role}</span>
+                    <span class="text-base font-normal text-fg-muted">{job.org}</span>
+                  </h3>
+                  <ul class="m-0 mt-3 list-disc space-y-1 p-0 pl-5 text-sm text-fg-muted">
+                    {job.bullets.map((line) => (
+                      <li>{line}</li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- Education -->
+      <section data-animate data-animate-on-load-only>
+        <h2 class={sectionTitle}>{about.educationTitle}</h2>
+        <ol class="m-0 list-none divide-y divide-border p-0">
+          {
+            about.education.map((edu) => (
+              <li class="m-0 grid items-baseline gap-x-6 gap-y-2 py-6 first:pt-0 last:pb-0 sm:grid-cols-[8rem_1fr] sm:gap-y-1">
+                <p class="m-0 font-mono-maple text-sm text-fg-muted tabular-nums">{edu.period}</p>
+                <h3 class="title-flush m-0 flex flex-wrap gap-x-4 gap-y-1 leading-snug font-bold text-fg">
+                  {edu.degree && <span class="text-xl">{edu.degree}</span>}
+                  <span class={edu.degree ? "text-base font-normal text-fg-muted" : "text-xl"}>
+                    {edu.school}
+                  </span>
+                </h3>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- Projects -->
+      <section data-animate data-animate-on-load-only>
+        <h2 class={sectionTitle}>{about.projectsTitle}</h2>
+        <ul class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2">
+          {
+            about.projects.map((proj) => (
+              <li class="m-0 p-0 [&:last-child:nth-child(odd)]:sm:col-span-2">
+                <a
+                  href={proj.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group inline-flex items-center gap-1.5 font-mono-maple text-base font-bold text-fg no-underline hover:underline"
+                >
+                  {proj.name}
+                  <ArrowUpRight size={14} class="text-fg-muted" aria-hidden="true" />
+                </a>
+                <p class="m-0 mt-0.5 text-sm whitespace-pre-line text-fg-muted">
+                  {proj.description}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Skills -->
+      <section data-animate data-animate-on-load-only>
+        <h2 class={sectionTitle}>{about.stackTitle}</h2>
+        <ul class="m-0 list-none space-y-3 p-0">
+          {
+            about.stack.map((group) => (
+              <li class="m-0 grid gap-x-3 gap-y-0.5 p-0 sm:grid-cols-[5.5rem_1fr]">
+                <p class="m-0 font-sans text-sm text-fg">{group.label}</p>
+                <p class="m-0 font-mono-maple text-sm text-fg-muted">{group.items.join(" / ")}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <!-- Links -->
+      <!--
+      <section data-animate-on-load-only>
+        <h2 data-animate class={sectionTitle}>{about.linksTitle}</h2>
+        <SocialLinks client:load links={socialLinks} />
+      </section>
+      -->
+    </div>
+  </div>
+</Layout>

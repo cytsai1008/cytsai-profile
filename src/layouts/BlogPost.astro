@@ -1,0 +1,95 @@
+---
+import "@chinese-fonts/maple-mono-cn/dist/MapleMono-CN-Regular/result.css";
+import "@chinese-fonts/maple-mono-cn/dist/MapleMono-CN-Bold/result.css";
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { Schema } from "astro-seo-schema";
+import Layout from "./Layout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import { getLocaleFromUrl, localeLang, localePath, t } from "../i18n/utils";
+import { SITE_TITLE } from "../consts";
+
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const stripped = Astro.url.pathname.replace(/^\/|\/$/g, "");
+const isHome = stripped === "" || stripped === "zh-tw" || stripped === "zh-cn";
+const pagePath = isHome ? (stripped ? `${stripped}_home` : "home") : stripped.replace(/\//g, "_");
+const ogFallbackSrc = `/og/${pagePath}.png`;
+const tr = t(locale);
+---
+
+<Layout
+  title={title}
+  description={description ?? ""}
+  image={heroImage}
+  locale={locale}
+  type="article"
+  pubDate={pubDate}
+  updatedDate={updatedDate}
+>
+  <Schema
+    item={{
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: title,
+      description: description ?? "",
+      datePublished: pubDate.toISOString(),
+      dateModified: (updatedDate ?? pubDate).toISOString(),
+      url: canonicalURL.href,
+      mainEntityOfPage: { "@type": "WebPage", "@id": canonicalURL.href },
+      inLanguage: localeLang[locale],
+      ...(heroImage && { image: new URL(heroImage.src, Astro.site).href }),
+      ...(tags?.length && { keywords: tags.join(", ") }),
+      author: { "@type": "Person", "@id": new URL("/about", Astro.site).href, name: SITE_TITLE },
+      publisher: { "@type": "Person", "@id": new URL("/about", Astro.site).href, name: SITE_TITLE },
+    }}
+  />
+  <article data-animate class="mx-auto max-w-5xl px-4 py-12">
+    {
+      heroImage && (
+        <div class="mb-8 max-h-72 overflow-hidden rounded-2xl">
+          <Image
+            src={heroImage}
+            alt=""
+            width={1020}
+            height={510}
+            fetchpriority="high"
+            class="h-72 w-full object-contain"
+          />
+        </div>
+      )
+    }
+
+    <header class="mb-8 text-center">
+      <div class="mb-3 flex flex-wrap items-center justify-center gap-2 text-sm text-fg-muted">
+        <FormattedDate date={pubDate} locale={locale} />
+        {
+          updatedDate && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span class="italic">
+                {tr.blog.updatedOn} <FormattedDate date={updatedDate} locale={locale} />
+              </span>
+            </>
+          )
+        }
+      </div>
+      <h1 class="text-3xl leading-tight font-bold text-fg sm:text-4xl">{title}</h1>
+      <hr class="mt-6" />
+    </header>
+
+    <div class="prose max-w-none">
+      <slot />
+    </div>
+
+    <div class="mt-12 border-t border-border pt-6">
+      <a href={localePath("/blog", locale)} class="text-sm font-medium text-accent">
+        ← {tr.nav.blog}
+      </a>
+    </div>
+  </article>
+</Layout>
