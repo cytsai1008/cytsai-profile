@@ -38,10 +38,14 @@ const year = new Date().getFullYear();
         >MIT</a
       >
     </span>
-    <span data-animate data-opacity="0.35" aria-hidden="true" class="hidden text-fg-muted sm:inline"
-      >|</span
+    {/* No JS = no cookie banner and no modal to open, so drop the control and its separator */}
+    <span
+      data-animate
+      data-opacity="0.35"
+      aria-hidden="true"
+      class="js-only hidden text-fg-muted sm:inline">|</span
     >
-    <span data-animate class="text-xs">
+    <span data-animate class="js-only text-xs">
       <button
         type="button"
         data-cc="show-preferencesModal"

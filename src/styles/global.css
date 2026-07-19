@@ -41,6 +41,27 @@
   --warning-bg: #7a3232;
 }
 
+/* No JS: nothing can add .dark, so follow the OS directly.
+   ponytail: palette duplicated from .dark above — keep the two in sync. */
+@media (prefers-color-scheme: dark) {
+  html:not(.js) {
+    --surface: #0f1319;
+    --surface-alt: #161b22;
+    --fg: #e6edf3;
+    --fg-muted: #8b95a1;
+    --accent: #7aa5d8;
+    --accent-text: #7aa5d8;
+    --accent-bg: #3d6ba1;
+    --accent-dim: #345c8a;
+    --highlight: #d4a84b;
+    --highlight-dim: #b88c35;
+    --border: #262d38;
+    --warning: #c47878;
+    --warning-bg: #7a3232;
+    color-scheme: dark;
+  }
+}
+
 /* ─── Step 2: Tailwind tokens via @theme inline ─────────── *
  *  "inline" = output var(...) in utilities, not static hex.
  * ─────────────────────────────────────────────────────────── */
@@ -336,6 +357,12 @@
     font-weight: 600;
   }
 } /* end @layer base */
+
+/* ─── No-JS fallbacks ───────────────────────────────────── */
+/* Anything that only works once hydrated. Same html.js gate as below, inverted. */
+html:not(.js) .js-only {
+  display: none !important;
+}
 
 /* ─── Scroll animations initial state ───────────────────── */
 /* Only hides elements when JS is present (class added by inline script before paint) */

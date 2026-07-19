@@ -1,10 +1,19 @@
 ---
+import { ChevronDown, Languages } from "@lucide/astro";
 import BaseHead from "../components/BaseHead.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import CookieConsent from "../components/CookieConsent.astro";
 import NavBar from "../components/NavBar.vue";
 import type { ImageMetadata } from "astro";
-import { getLocaleFromUrl, localeLang, localePath, t, type Locale } from "../i18n/utils";
+import {
+  getLocaleFromUrl,
+  localeLang,
+  localePath,
+  locales,
+  switchLocalePath,
+  t,
+  type Locale,
+} from "../i18n/utils";
 import { SITE_TITLE } from "../consts";
 
 interface Props {
@@ -63,6 +72,59 @@ const navLinks = [
       menuCloseLabel={tr.nav.closeMenu}
       langLabel={tr.lang.label}
     />
+
+    {
+      /* Unhydrated NavBar leaves the hamburger and language dropdown inert — plain links instead. */
+    }
+    <noscript>
+      <nav
+        class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-sm"
+        aria-label="Main navigation"
+      >
+        {
+          navLinks.map((link) => (
+            <a href={link.href} class="text-fg-muted capitalize md:hidden">
+              {link.label}
+            </a>
+          ))
+        }
+        {/* ponytail: <details> is the native disclosure — no JS needed to open it */}
+        <details class="group relative ml-auto">
+          <summary
+            class="flex cursor-pointer list-none items-center gap-1 rounded-lg px-2.5 py-1.5 font-medium text-fg transition-colors hover:bg-surface-alt [&::-webkit-details-marker]:hidden"
+          >
+            <Languages size={16} class="text-fg-muted" aria-hidden="true" />
+            {tr.lang.label}
+            <ChevronDown
+              size={14}
+              class="transition-transform group-open:rotate-180"
+              aria-hidden="true"
+            />
+          </summary>
+          <ul
+            class="absolute right-0 z-70 m-0 mt-2 w-36 list-none rounded-xl border border-border bg-surface p-1 shadow-lg"
+          >
+            {
+              locales.map((l) => (
+                <li>
+                  <a
+                    href={switchLocalePath(Astro.url, l)}
+                    lang={localeLang[l]}
+                    aria-current={l === locale ? "true" : undefined}
+                    class:list={[
+                      "block rounded-lg px-3 py-1.5 no-underline transition-colors hover:bg-surface-alt",
+                      l === locale ? "font-medium text-accent-text" : "text-fg",
+                    ]}
+                  >
+                    {tr.lang[l]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </details>
+      </nav>
+    </noscript>
 
     <main id="main-content">
       <slot />

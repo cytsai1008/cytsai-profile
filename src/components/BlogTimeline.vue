@@ -146,7 +146,7 @@ function onTouchCancel() {
        so it's hidden from AT / tab order to avoid a 2x-length tab sequence. -->
   <nav
     aria-hidden="true"
-    class="fixed right-0 z-40 flex w-40 touch-none flex-col items-end pr-2 xl:pr-3"
+    class="js-only fixed right-0 z-40 flex w-40 touch-none flex-col items-end pr-2 xl:pr-3"
     :class="[
       railTop === null && 'top-1/2 -translate-y-1/2',
       activeIdx !== null && 'cursor-pointer',

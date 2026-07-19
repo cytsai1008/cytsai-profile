@@ -529,8 +529,9 @@ function isActive(href: string) {
           </li>
         </ul>
 
-        <!-- Col 3: Controls (right-aligned) -->
-        <div class="flex items-center justify-end gap-1">
+        <!-- Col 3: Controls (right-aligned) — all inert until hydrated, so no-JS gets
+             the <noscript> fallback in Layout.astro instead -->
+        <div class="js-only flex items-center justify-end gap-1">
           <!-- Theme wrapper: compact icon always visible; full panel absolute on hover -->
           <div
             class="relative -my-3 hidden items-center py-3 md:flex"
