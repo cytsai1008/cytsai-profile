@@ -15,6 +15,7 @@
     "lf": "npm run lint && npm run format"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.9",
     "@astrojs/cloudflare": "^14.0.0",
     "@astrojs/mdx": "^7.0.0",
     "@astrojs/sitemap": "^3.7.3",
