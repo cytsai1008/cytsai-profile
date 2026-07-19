@@ -91,7 +91,7 @@ linksTitle: Links
 ---
 
 Student, engineer, and occasionally a cat.  
-Mainly focused on frontend development — web design, coding, deployment, and maintenance. Beyond that, I know my way around the backend too: standing up a full server, maintaining database-related CIDR, and configuring DNS.  
+Mainly focused on frontend development — web design, coding, deployment, and maintenance. Beyond that, I know my way around the backend too: standing up a full server, maintaining database-related CRUD, and configuring DNS.  
 I've also worked on plenty of healthcare digitization projects and am familiar with the FHIR standard and related tech.  
 I actively embrace and keep learning through the AI wave; my main dev tools right now are Claude Code and OpenAI Codex.  
 I enjoy learning new tech and putting it to work on real projects, and I keep building small apps in my spare time.
