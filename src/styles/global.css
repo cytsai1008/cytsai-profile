@@ -368,6 +368,21 @@ html:not(.js) .js-only {
 /* Only hides elements when JS is present (class added by inline script before paint) */
 html.js [data-animate]:not([data-animate-done]) {
   opacity: 0;
+  /* Failsafe: if the animation chunk never lands (network drop, blocked asset),
+     reveal anyway rather than leaving the page permanently blank. Measured reveal
+     on Slow 3G is ~4s after first paint, so 6s only fires when JS genuinely failed.
+     ponytail: settles sub-1 [data-opacity] elements at 1; acceptable for a fallback. */
+  animation: animate-failsafe 0s linear 6s forwards;
+}
+@keyframes animate-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-animate]:not([data-animate-done]) {
+    animation-delay: 0s;
+  }
 }
 /* Reduced-motion: mark done immediately, CSS makes them visible */
 html.js [data-animate][data-animate-done] {

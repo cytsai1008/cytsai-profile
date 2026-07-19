@@ -7,6 +7,11 @@
       "custom_domain": true,
     },
   ],
+  // Without this, unknown URLs return HTTP 404 with a zero-byte body — a blank
+  // white page. src/pages/404.astro is built but was never routed to.
+  "assets": {
+    "not_found_handling": "404-page",
+  },
   "observability": {
     "logs": {
       "enabled": true,
