@@ -11,6 +11,7 @@ experience:
     bullets:
       - "負責公司內部專案的開發、維護與部署，並協助重構與修復 bug"
       - "參與公司專案的網頁設計與程式開發"
+      - "建立設計規範與 UI Kit，統一內部產品的設計標準"
       - "協助處理 FHIR 相關專案，並維護對應程式碼"
       - "協助建置自動化部署流程，並維護相關設定"
       - "代表公司參加 IHE Japan Connectathon Week 2026，與其他廠商針對 IHE FHIR Profile（IUA、PIXm、PDQm）進行互通性測試，確認雙方系統能正確交換資料並符合標準"
