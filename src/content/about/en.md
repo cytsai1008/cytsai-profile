@@ -10,7 +10,7 @@ experience:
     org: "Sitatech Information Services Co., Ltd."
     bullets:
       - "Develop, maintain, and deploy internal company projects; assist with refactoring and bug fixes."
-      - "Contribute to web design and development for company projects."
+      - "Handle frontend development and design for company projects."
       - "Set up the design guidelines and UI kit to standardize design across internal products."
       - "Support the company's FHIR-related projects and maintain the associated code."
       - "Help set up the company's automated deployment pipelines and maintain the related code."
