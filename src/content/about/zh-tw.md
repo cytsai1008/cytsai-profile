@@ -13,6 +13,7 @@ experience:
       - "參與公司專案的網頁設計與程式開發"
       - "協助處理 FHIR 相關專案，並維護對應程式碼"
       - "協助建置自動化部署流程，並維護相關設定"
+      - "代表公司參加 IHE Japan Connectathon Week 2026，與其他廠商針對 IHE FHIR Profile（IUA、PIXm、PDQm）進行互通性測試，確認雙方系統能正確交換資料並符合標準"
   - period: "2024 — 2025"
     role: "外部助理工程師"
     org: "矽塔資訊服務有限公司"
